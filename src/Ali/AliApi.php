@@ -24,7 +24,7 @@ class AliApi {
 
 	public static $defaultTask = [
 		// 音频编码格式 PCM/WAV/MP3
-		"format" => "MP3",
+		"format" => "mp3",
 		// 音频采样率 6000Hz/8000Hz，默认值：16000Hz。
 		"sample_rate" => 16000,
 		// voice 发音人，可选，默认是aiqi。
@@ -118,7 +118,11 @@ class AliApi {
 
 		$request['appkey'] = $appkey;
 		$request['token']  = $token;
-		$request['text']   = $text;
+		$textUrlEncode = urlencode($text);
+		$textUrlEncode = preg_replace('/\+/', '%20', $textUrlEncode);
+		$textUrlEncode = preg_replace('/\*/', '%2A', $textUrlEncode);
+		$textUrlEncode = preg_replace('/%7E/', '~', $textUrlEncode);
+		$request['text']   = $method == 'post' ? $text : $textUrlEncode;
 
 		$method = strtolower($method);
 		if ($method == "get") {
