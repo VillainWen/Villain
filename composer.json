@@ -1,0 +1,28 @@
+{
+    "name": "villain/villain",
+    "description": "集合阿里云API，百度云API，腾讯云API，微信公众号开发等",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "VillainWen",
+            "email": "1779479582@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.1.0",
+        "ext-json": "*",
+        "baidu/aip-sdk": "^2.2",
+        "aliyuncs/oss-sdk-php": "^2.3",
+        "alibabacloud/sdk": "^1.8",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Villain\\Baidu\\": "src",
+            "Villain\\Ali\\": "src",
+            "Villain\\Wechat\\": "src"
+        }
+    }
+}
