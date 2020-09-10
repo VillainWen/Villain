@@ -20,9 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Villain\\Baidu\\": "src",
-            "Villain\\Ali\\": "src",
-            "Villain\\Wechat\\": "src"
+            "Villain\\": "src"
         }
     }
 }
