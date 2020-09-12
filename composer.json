@@ -16,7 +16,9 @@
         "baidu/aip-sdk": "^2.2",
         "aliyuncs/oss-sdk-php": "^2.3",
         "alibabacloud/sdk": "^1.8",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "guzzlehttp/guzzle": "6.5",
+        "alibabacloud/viapi-utils": "dev-master"
     },
     "autoload": {
         "psr-4": {
