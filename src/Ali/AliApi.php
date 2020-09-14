@@ -215,8 +215,8 @@ class AliApi {
 			->asDefaultClient();
 
 
-		$token = Cache::get($appid . '_token');
-		$time  = Cache::get($appid . '_time');
+		$token = Cache::get($this->accessKeyId . '_token');
+		$time  = Cache::get($this->accessKeyId . '_time');
 
 		if ($time > time() + 60*60*20) {
 			if($token){
@@ -232,8 +232,8 @@ class AliApi {
 
 			$token = $response["Token"];
 			if ($token != NULL) {
-				Cache::set($appid.'_token', $token['Id'], $data['ExpireTime']-time());
-				Cache::set($appid.'_time', $token['ExpireTime'],  $token['ExpireTime']-time());
+				Cache::set($this->accessKeyId.'_token', $token['Id'], $data['ExpireTime']-time());
+				Cache::set($this->accessKeyId.'_time', $token['ExpireTime'],  $token['ExpireTime']-time());
 				return $data['Id'];
 			}
 			else {
