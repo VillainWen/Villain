@@ -232,9 +232,9 @@ class AliApi {
 
 			$token = $response["Token"];
 			if ($token != NULL) {
-				Cache::set($this->accessKeyId.'_token', $token['Id'], $data['ExpireTime']-time());
+				Cache::set($this->accessKeyId.'_token', $token['Id'], $token['ExpireTime']-time());
 				Cache::set($this->accessKeyId.'_time', $token['ExpireTime'],  $token['ExpireTime']-time());
-				return $data['Id'];
+				return $token['Id'];
 			}
 			else {
 				print "token 获取失败\n";
