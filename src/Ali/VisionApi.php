@@ -119,11 +119,14 @@ class VisionApi {
 					'query' => $query,
 				])
 				->request();
-			print_r($result->toArray());
+				$return = $result->toArray();
+				return $return['RequestId'];
 		} catch (ClientException $e) {
-			echo $e->getErrorMessage() . PHP_EOL;
+			$this->tips_info = $e->getErrorMessage();
+			return false;
 		} catch (ServerException $e) {
-			echo $e->getErrorMessage() . PHP_EOL;
+			$this->tips_info = $e->getErrorMessage();
+			return false;
 		}
 	}
 }
