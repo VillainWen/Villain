@@ -17,7 +17,9 @@ namespace Villain\Ali;
 
 use Villain\Cache;
 use Villain\Logs;
-
+use AlibabaCloud\Client\AlibabaCloud;
+use AlibabaCloud\Client\Exception\ClientException;
+use AlibabaCloud\Client\Exception\ServerException;
 class AliApi {
 
 	public $tips_info;
@@ -96,7 +98,25 @@ class AliApi {
 		]
 	];
 
-	function __construct (Array $config, $runtime_path) {
+	/**
+	 *  阿里云主账号AccessKey拥有所有API的访问权限，风险很高。
+	 *  强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录RAM控制台创建RAM账号。
+	 * @var
+	 */
+	protected $accessKeyId;
+	protected $accessKeySecret;
+
+	/**
+	 * 地域
+	 * @var string
+	 */
+	protected $regionId = 'cn-shanghai';
+
+	function __construct ($accessKeyId, $accessKeySecret, $regionId = "cn-shanghai",Array $config, $runtime_path) {
+		$this->accessKeyId = $accessKeyId;
+		$this->accessKeySecret = $accessKeySecret;
+		$this->regionId = $regionId;
+
 		$this->runtime_path = $runtime_path . 'runtime/villain/ali/';
 		Cache::init($this->runtime_path . 'simplecache/');
 	}
@@ -104,20 +124,19 @@ class AliApi {
 	/**
 	 * 语音合成 非长文
 	 * @param        $appkey
-	 * @param        $token
 	 * @param        $text
 	 * @param string $method
 	 * @param array  $config
 	 * @param        $audioSaveFile
 	 * @return bool
 	 */
-	public function processTTSRequest($appkey, $token, $text, $method = "post", $config = [], $audioSaveFile) {
+	public function processTTSRequest($appkey, $text, $method = "post", $config = [], $audioSaveFile) {
 		$url = "https://nls-gateway.cn-shanghai.aliyuncs.com/stream/v1/tts";
 
 		$request = array_merge(self::$defaultTask, $config);
 
 		$request['appkey'] = $appkey;
-		$request['token']  = $token;
+		$request['token']  = $this->getAccessToken();
 		$textUrlEncode = urlencode($text);
 		$textUrlEncode = preg_replace('/\+/', '%20', $textUrlEncode);
 		$textUrlEncode = preg_replace('/\*/', '%2A', $textUrlEncode);
@@ -187,5 +206,47 @@ class AliApi {
 	private function logs ($content = '') {
 		$Logs = new Logs();
 		$Logs->logs($content, $this->runtime_path);
+	}
+
+	private function getAccessToken () {
+		AlibabaCloud::accessKeyClient(
+			$this->accessKeyId, $this->accessKeySecret)
+			->regionId($this->regionId)
+			->asDefaultClient();
+
+
+		$token = Cache::get($appid . '_token');
+		$time  = Cache::get($appid . '_time');
+
+		if ($time > time() + 60*60*20) {
+			if($token){
+				return $token;
+			}
+		}
+
+		try {
+			$response = AlibabaCloud::nlsCloudMeta()
+				->v20180518()
+				->createToken()
+				->request();
+
+			$token = $response["Token"];
+			if ($token != NULL) {
+				Cache::set($appid.'_token', $token['Id'], $data['ExpireTime']-time());
+				Cache::set($appid.'_time', $token['ExpireTime'],  $token['ExpireTime']-time());
+				return $data['Id'];
+			}
+			else {
+				print "token 获取失败\n";
+			}
+		} catch (ClientException $exception) {
+			// 获取错误消息
+			$this->logs($exception->getErrorMessage());
+			return false;
+		} catch (ServerException $exception) {
+			// 获取错误消息
+			$this->logs($exception->getErrorMessage());
+			return false;
+		}	
 	}
 }
