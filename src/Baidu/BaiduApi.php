@@ -167,7 +167,7 @@ class BaiduApi {
 
 	/**
 	 * 词法分析
-	 * @param string $text
+	 * @param string $text  待分析文本，长度不超过20000字节
 	 * @return bool|mixed
 	 */
 	public function lexer ($text = "") {
@@ -176,6 +176,29 @@ class BaiduApi {
 
 		$data['text'] = $text;
 
+		$json = $this->http($url, json_encode($data, 320), "POST", ["Content-type: application/json"]);
+
+		$return = json_decode($json, true);
+
+		if (isset($return['error_code']) && $return['error_code']) {
+			$this->logs($return['error_msg']);
+			return false;
+		}
+
+		return $return;
+	}
+
+	/**
+	 * 依存句法分析
+	 * @param string $content   待分析文本，长度不超过256字节
+	 * @param int    $mode      模型选择。默认值为0，可选值mode=0（对应web模型）；mode=1（对应query模型）
+	 * @return bool|mixed
+	 */
+	public function depparser( $content = '', $mode = 0) {
+		$access_token = $this->getAccessToken();
+		$data['mode'] = $mode;
+		$data['text'] = $content;
+		$url = "https://aip.baidubce.com/rpc/2.0/nlp/v1/depparser?charset=UTF-8&access_token=" . $access_token;
 		$json = $this->http($url, json_encode($data, 320), "POST", ["Content-type: application/json"]);
 
 		$return = json_decode($json, true);
