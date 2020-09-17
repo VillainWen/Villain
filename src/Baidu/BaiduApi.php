@@ -165,7 +165,28 @@ class BaiduApi {
 		return $return['summary'];
 	}
 
+	/**
+	 * 词法分析
+	 * @param string $text
+	 * @return bool|mixed
+	 */
+	public function lexer ($text = "") {
+		$access_token = $this->getAccessToken();
+		$url = "https://aip.baidubce.com/rpc/2.0/nlp/v1/lexer?charset=UTF-8&access_token=" . $access_token;
 
+		$data['text'] = $text;
+
+		$json = $this->http($url, json_encode($data, 320), "POST", ["Content-type: application/json"]);
+
+		$return = json_decode($json, true);
+
+		if (isset($return['error_code']) && $return['error_code']) {
+			$this->logs($return['error_msg']);
+			return false;
+		}
+
+		return $return;
+	}
 
 	/**
 	 * [logs 日志]
