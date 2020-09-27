@@ -13,7 +13,7 @@
  */
 
 
-namespace Villain\Npl;
+namespace Villain\Nlp;
 
 
 interface NplInterface {

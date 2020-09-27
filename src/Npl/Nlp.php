@@ -13,9 +13,9 @@
  */
 
 
-namespace Villain\Npl;
+namespace Villain\Nlp;
 
-class Npl {
+class Nlp {
 
 	public $tips_info;
 

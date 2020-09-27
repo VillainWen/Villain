@@ -13,7 +13,7 @@
  */
 
 
-namespace Villain\Npl;
+namespace Villain\Nlp;
 
 use Villain\Cache;
 use Villain\Logs;
