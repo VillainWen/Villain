@@ -17,8 +17,8 @@ namespace Villain\Nlp;
 
 use Villain\Cache;
 use Villain\Logs;
-use Villain\Npl\NplInterface;
-class BaiduApi implements NplInterface{
+use Villain\Nlp\NlpInterface;
+class BaiduApi implements NlpInterface{
 
 	/**
 	 * 开发者ID

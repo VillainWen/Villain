@@ -16,7 +16,7 @@
 namespace Villain\Nlp;
 
 
-interface NplInterface {
+interface NlpInterface {
 	/**
 	 * 获取摘要
 	 * @return mixed
