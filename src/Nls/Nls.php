@@ -32,7 +32,7 @@ class Nls {
 	 */
 	public static function create($container, array $configuration = []) {
 		if ($container === "aliNls") {
-			return new AliNls($configuration['accessKeyId'], $configuration['accessKeySecret'], $configuration['regionId'], $configuration['runtime_path']);
+			return new AliNls($configuration['accessKeyId'], $configuration['accessKeySecret'], $configuration['runtime_path'], $configuration['regionId']);
 		}
 		return null;
 	}
