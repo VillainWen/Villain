@@ -118,10 +118,10 @@ class AliNls {
 	 * @param string $regionId
 	 * @param        $runtime_path
 	 */
-	public function __construct ($accessKeyId, $accessKeySecret, $regionId, $runtime_path) {
+	public function __construct ($accessKeyId, $accessKeySecret, $runtime_path, $regionId = "cn-shanghai") {
 		$this->accessKeyId = $accessKeyId;
 		$this->accessKeySecret = $accessKeySecret;
-		$this->regionId = $regionId ? $regionId : "cn-shanghai";
+		$this->regionId = $regionId;
 
 		$this->runtime_path = $runtime_path . 'runtime/villain/ali/';
 		Cache::init($this->runtime_path . 'simplecache/');
@@ -136,7 +136,7 @@ class AliNls {
 	 * @param        $audioSaveFile
 	 * @return bool
 	 */
-	public function processTTSRequest($appkey, $text, $method = "post", $config = [], $audioSaveFile) {
+	public function processTTSRequest($appkey, $text, $audioSaveFile, $method = "post", $config = []) {
 		$url = "https://nls-gateway.cn-shanghai.aliyuncs.com/stream/v1/tts";
 
 		$request = array_merge(self::$defaultTask, $config);
