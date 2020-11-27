@@ -104,6 +104,12 @@ class AliNls {
 	 */
 	protected $accessKeyId;
 	protected $accessKeySecret;
+	
+	public $is_region = false;
+	
+	protected $uri = "/stream/v1/tts";
+	protected $host = "https://nls-gateway.cn-shanghai.aliyuncs.com";
+	protected $vpc_host = "https://nls-gateway.cn-shanghai-internal.aliyuncs.com";
 
 	/**
 	 * 地域
@@ -137,8 +143,8 @@ class AliNls {
 	 * @return bool
 	 */
 	public function processTTSRequest($appkey, $text, $audioSaveFile, $method = "post", $config = []) {
-		$url = "https://nls-gateway.cn-shanghai.aliyuncs.com/stream/v1/tts";
-
+		$url = $this->is_region ? $this->vpc_host : $this->host;
+		$url = $url . $this->uri;
 		$request = array_merge(self::$defaultTask, $config);
 
 		$request['appkey'] = $appkey;
